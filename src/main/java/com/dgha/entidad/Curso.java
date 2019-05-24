@@ -6,7 +6,11 @@ public class Curso {
 	private String nombreCurso;
 	private String estadoCurso;
 
+	/**
+	 * Se inicializa con id = -1, porque en algunos casos se crea el nodo con id = 0
+	 */
 	public Curso() {
+		this.id = -1;
 	}
 
 	public Curso(String codigoCurso, String nombreCurso, String estadoCurso) {

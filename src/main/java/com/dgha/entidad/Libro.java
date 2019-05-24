@@ -1,15 +1,14 @@
 package com.dgha.entidad;
 
 public class Libro {
-	
+
 	private int id;
 	private String clasificacion;
 	private String titulo;
 	private int anio;
 	private String autor;
-	private String numeroIngreso;
 	private String codBarras;
-	private String ejemItem;
+	private String codEditorial;
 	private int numeroCalificaciones;
 	private int ultCalifEntendible;
 	private int califAcumEntendible;
@@ -28,25 +27,60 @@ public class Libro {
 	private float califComentario;
 	private float calificacionPromedio;
 	private int numPedidos;
-	private String codEditorial;
 	private String estadoLibro;
-	
+
+	/**
+	 * Se inicializa con id = -1, porque en algunos casos se crea el nodo con id = 0
+	 */
 	public Libro() {
+		this.id = -1;
 	}
 
-	public Libro(String clasificacion, String titulo, int anio, String autor, String numeroIngreso, String codBarras,
-			String ejemItem, int numeroCalificaciones, int ultCalifEntendible, int califAcumEntendible,
-			float califEntendible, int ultCalifActualizado, int califAcumActualizado, float califActualizado,
-			int ultCalifTeoria, int califAcumTeoria, float califTeoria, int ultCalifPractica, int califAcumPractica,
-			float califPractica, int ultCalifComentario, int califAcumComentario, float califComentario,
-			float calificacionPromedio, int numPedidos, String codEditorial, String estadoLibro) {
+	public Libro(int id, String clasificacion, String titulo, int anio, String autor, String codBarras,
+			int numeroCalificaciones, int ultCalifEntendible, int califAcumEntendible, float califEntendible,
+			int ultCalifActualizado, int califAcumActualizado, float califActualizado, int ultCalifTeoria,
+			int califAcumTeoria, float califTeoria, int ultCalifPractica, int califAcumPractica, float califPractica,
+			int ultCalifComentario, int califAcumComentario, float califComentario, float calificacionPromedio,
+			int numPedidos, String codEditorial, String estadoLibro) {
+		this.id = id;
 		this.clasificacion = clasificacion;
 		this.titulo = titulo;
 		this.anio = anio;
 		this.autor = autor;
-		this.numeroIngreso = numeroIngreso;
 		this.codBarras = codBarras;
-		this.ejemItem = ejemItem;
+		this.numeroCalificaciones = numeroCalificaciones;
+		this.ultCalifEntendible = ultCalifEntendible;
+		this.califAcumEntendible = califAcumEntendible;
+		this.califEntendible = califEntendible;
+		this.ultCalifActualizado = ultCalifActualizado;
+		this.califAcumActualizado = califAcumActualizado;
+		this.califActualizado = califActualizado;
+		this.ultCalifTeoria = ultCalifTeoria;
+		this.califAcumTeoria = califAcumTeoria;
+		this.califTeoria = califTeoria;
+		this.ultCalifPractica = ultCalifPractica;
+		this.califAcumPractica = califAcumPractica;
+		this.califPractica = califPractica;
+		this.ultCalifComentario = ultCalifComentario;
+		this.califAcumComentario = califAcumComentario;
+		this.califComentario = califComentario;
+		this.calificacionPromedio = calificacionPromedio;
+		this.numPedidos = numPedidos;
+		this.codEditorial = codEditorial;
+		this.estadoLibro = estadoLibro;
+	}
+
+	public Libro(String clasificacion, String titulo, int anio, String autor, String codBarras,
+			int numeroCalificaciones, int ultCalifEntendible, int califAcumEntendible, float califEntendible,
+			int ultCalifActualizado, int califAcumActualizado, float califActualizado, int ultCalifTeoria,
+			int califAcumTeoria, float califTeoria, int ultCalifPractica, int califAcumPractica, float califPractica,
+			int ultCalifComentario, int califAcumComentario, float califComentario, float calificacionPromedio,
+			int numPedidos, String codEditorial, String estadoLibro) {
+		this.clasificacion = clasificacion;
+		this.titulo = titulo;
+		this.anio = anio;
+		this.autor = autor;
+		this.codBarras = codBarras;
 		this.numeroCalificaciones = numeroCalificaciones;
 		this.ultCalifEntendible = ultCalifEntendible;
 		this.califAcumEntendible = califAcumEntendible;
@@ -109,28 +143,12 @@ public class Libro {
 		this.autor = autor;
 	}
 
-	public String getNumeroIngreso() {
-		return numeroIngreso;
-	}
-
-	public void setNumeroIngreso(String numeroIngreso) {
-		this.numeroIngreso = numeroIngreso;
-	}
-
 	public String getCodBarras() {
 		return codBarras;
 	}
 
 	public void setCodBarras(String codBarras) {
 		this.codBarras = codBarras;
-	}
-
-	public String getEjemItem() {
-		return ejemItem;
-	}
-
-	public void setEjemItem(String ejemItem) {
-		this.ejemItem = ejemItem;
 	}
 
 	public int getNumeroCalificaciones() {
@@ -292,6 +310,5 @@ public class Libro {
 	public void setEstadoLibro(String estadoLibro) {
 		this.estadoLibro = estadoLibro;
 	}
-	
-	
+
 }

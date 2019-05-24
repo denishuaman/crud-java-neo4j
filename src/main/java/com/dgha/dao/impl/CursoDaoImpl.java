@@ -36,6 +36,9 @@ public class CursoDaoImpl implements CursoDao {
 				curso.setEstadoCurso(record.get("estadoCurso").asString());
 				cursos.add(curso);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		} finally {
 			this.utilConexion.limpiarRecursos(transaccion);
 		}
@@ -45,45 +48,56 @@ public class CursoDaoImpl implements CursoDao {
 	@Override
 	public void registrarCurso(Curso curso) {
 		Transaction transaccion = this.utilConexion.getSession().beginTransaction();
-		String query = "create (c:Curso {codigoCurso: $codigoCurso, nombreCurso: $nombreCurso, estadoCurso: $estadoCurso})";
+		String query = "create (c:Curso {codigoCurso: $codigoCurso, nombreCurso: $nombreCurso, estadoCurso: $estadoCurso}) \n"
+				+ "return id(c) as id";
 		try {
-			transaccion.run(query, Values.parameters("codigoCurso", curso.getCodigoCurso(), "nombreCurso",
+			StatementResult statementResult = transaccion.run(query, Values.parameters("codigoCurso", curso.getCodigoCurso(), "nombreCurso",
 					curso.getNombreCurso(), "estadoCurso", curso.getEstadoCurso()));
-			transaccion.success();
-		} finally {
-			this.utilConexion.limpiarRecursos(transaccion);
-		}
-	}
-
-	@Override
-	public boolean modificarCurso(Curso curso) {
-		Transaction transaccion = this.utilConexion.getSession().beginTransaction();
-		String query = "match(n:Curso) " + "where id(n) = $id " + "set n.codigoCurso = $codigoCurso, "
-				+ "n.nombreCurso = $nombreCurso, " + "n.estadoCurso = $estadoCurso";
-		try {
-			transaccion.run(query, Values.parameters("id", curso.getId(), "codigoCurso", curso.getCodigoCurso(),
-					"nombreCurso", curso.getNombreCurso(), "estadoCurso", curso.getEstadoCurso()));
-			transaccion.success();
-			return true;
+			if(statementResult.hasNext()) {
+				Record record = statementResult.next();
+				curso.setId(record.get("id").asInt());
+				transaccion.success();
+			}
 		} catch (Exception e) {
+			transaccion.failure();
 			e.printStackTrace();
-			return false;
+			throw e;
 		} finally {
 			this.utilConexion.limpiarRecursos(transaccion);
 		}
 	}
 
 	@Override
-	public boolean eliminarCurso(Curso curso) {
+	public void modificarCurso(Curso curso) {
 		Transaction transaccion = this.utilConexion.getSession().beginTransaction();
-		String query = "match(n:Curso) where id(n) = $id delete n";
+		String query = "match(n:Curso) where id(n) = $id \n"
+				+ "set n.codigoCurso = $codigoCurso, n.nombreCurso = $nombreCurso, n.estadoCurso = $estadoCurso \n"
+				+ "return id(n)";
+		try {
+			StatementResult statementResult = transaccion.run(query, Values.parameters("id", curso.getId(), "codigoCurso", curso.getCodigoCurso(),
+					"nombreCurso", curso.getNombreCurso(), "estadoCurso", curso.getEstadoCurso()));
+			if(statementResult.hasNext()) {
+				transaccion.success();
+			}
+		} catch (Exception e) {
+			transaccion.failure();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			this.utilConexion.limpiarRecursos(transaccion);
+		}
+	}
+
+	@Override
+	public void eliminarCurso(Curso curso) {
+		Transaction transaccion = this.utilConexion.getSession().beginTransaction();
+		String query = "match(n:Curso) where id(n) = $id detach delete n";
 		try {
 			transaccion.run(query, Values.parameters("id", curso.getId()));
 			transaccion.success();
-			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			throw e;
 		} finally {
 			this.utilConexion.limpiarRecursos(transaccion);
 		}

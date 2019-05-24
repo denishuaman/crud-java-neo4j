@@ -10,7 +10,7 @@ public interface CursoDao {
 
 	public void registrarCurso(Curso curso);
 
-	public boolean modificarCurso(Curso curso);
+	public void modificarCurso(Curso curso);
 
-	public boolean eliminarCurso(Curso curso);
+	public void eliminarCurso(Curso curso);
 }

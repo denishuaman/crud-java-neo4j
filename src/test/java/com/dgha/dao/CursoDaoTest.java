@@ -1,5 +1,7 @@
 package com.dgha.dao;
 
+import static org.junit.Assert.fail;
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -34,29 +36,42 @@ public class CursoDaoTest {
 	@Test
 	public void registrarCurso() {
 		Curso curso = new Curso();
-		curso.setCodigoCurso("201905223");
-		curso.setNombreCurso("Algorítmica III");
-		curso.setEstadoCurso("1");
-		dao.registrarCurso(curso);
+		try {
+			curso.setCodigoCurso("20190524002");
+			curso.setNombreCurso("Computación e Informática");
+			curso.setEstadoCurso("1");
+			dao.registrarCurso(curso);
+			Assert.assertTrue(curso.getId() > 0);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 
 	@Ignore
 	@Test
 	public void modificarCurso() {
 		Curso curso = new Curso();
-		curso.setId(21);
-		curso.setCodigoCurso("201905224");
-		curso.setNombreCurso("Ecuaciones Diferenciales");
-		curso.setEstadoCurso("1");
-		Assert.assertEquals(true, dao.modificarCurso(curso));
+		try {
+			curso.setId(0);
+			curso.setCodigoCurso("201905222");
+			curso.setNombreCurso("Ecuaciones Diferenciales");
+			curso.setEstadoCurso("1");
+			dao.modificarCurso(curso);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 
 	@Ignore
 	@Test
 	public void eliminarCurso() {
-		Curso curso = new Curso();
-		curso.setId(21);
-		Assert.assertEquals(true, dao.eliminarCurso(curso));
+		try {
+			Curso curso = new Curso();
+			curso.setId(0);
+			dao.eliminarCurso(curso);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 
 }
