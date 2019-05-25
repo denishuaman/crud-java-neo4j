@@ -87,11 +87,18 @@
 		<!-- <artifactId>neo4j</artifactId> -->
 		<!-- <version>3.5.3</version> -->
 		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.neo4j.driver</groupId> -->
+		<!-- <artifactId>neo4j-java-driver</artifactId> -->
+		<!-- <version>1.0.3</version> -->
+		<!-- </dependency> -->
+		<!-- https://mvnrepository.com/artifact/org.neo4j.driver/neo4j-java-driver -->
 		<dependency>
 			<groupId>org.neo4j.driver</groupId>
 			<artifactId>neo4j-java-driver</artifactId>
-			<version>1.0.3</version>
+			<version>1.7.5</version>
 		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
