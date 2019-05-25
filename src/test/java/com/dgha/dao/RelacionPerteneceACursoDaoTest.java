@@ -1,5 +1,7 @@
 package com.dgha.dao;
 
+import static org.junit.Assert.fail;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,11 +23,18 @@ public class RelacionPerteneceACursoDaoTest {
 	@Test
 	public void relacionar() {
 		Libro libro = new Libro();
-		libro.setId(25);
+		libro.setId(200);
 		Curso curso = new Curso();
-		curso.setId(9);
-		RelacionPerteneceACurso relacionPerteneceACurso = dao.relacionar(libro, curso, "usuario.total@email.com");
-		Assert.assertNotNull(relacionPerteneceACurso);
+		curso.setId(100);
+		RelacionPerteneceACurso relacionPerteneceACurso = new RelacionPerteneceACurso();
+		relacionPerteneceACurso.setUsuarioCreacion("usuario.principal@email.com");
+		try {
+			dao.relacionar(libro, curso, relacionPerteneceACurso);
+			Assert.assertTrue(relacionPerteneceACurso.getId() > 0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
 	}
 
 }

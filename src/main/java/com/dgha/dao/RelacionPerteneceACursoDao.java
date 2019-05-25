@@ -6,5 +6,5 @@ import com.dgha.entidad.RelacionPerteneceACurso;
 
 public interface RelacionPerteneceACursoDao {
 
-	public RelacionPerteneceACurso relacionar(Libro libro, Curso curso, String usuario);
+	public void relacionar(Libro libro, Curso curso, RelacionPerteneceACurso relacionPerteneceACurso) throws Exception;
 }
