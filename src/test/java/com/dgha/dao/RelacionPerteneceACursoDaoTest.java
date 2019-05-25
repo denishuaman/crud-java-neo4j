@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.dgha.dao.impl.RelacionPerteneceACursoDaoImpl;
@@ -20,6 +21,7 @@ public class RelacionPerteneceACursoDaoTest {
 		dao = new RelacionPerteneceACursoDaoImpl();
 	}
 
+	@Ignore
 	@Test
 	public void relacionar() {
 		Libro libro = new Libro();
@@ -33,7 +35,22 @@ public class RelacionPerteneceACursoDaoTest {
 			Assert.assertTrue(relacionPerteneceACurso.getId() > 0);
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void eliminarRelacion() {
+		Libro libro = new Libro();
+		libro.setId(25);
+		Curso curso = new Curso();
+		curso.setId(9);
+		try {
+			dao.eliminarRelacion(libro, curso);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 

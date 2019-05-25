@@ -24,7 +24,7 @@ public class RelacionPerteneceACursoDaoImpl implements RelacionPerteneceACursoDa
 	@Override
 	public void relacionar(Libro libro, Curso curso, RelacionPerteneceACurso relacionPerteneceACurso) throws Exception {
 		
-		if (relacionPerteneceACurso != null) {
+		if (libro != null && curso != null && relacionPerteneceACurso != null) {
 			Transaction transaccion = this.utilConexion.getSession().beginTransaction();
 			
 			String queryBuscarRelacion = "match (l:Libro) where id(l) = $ idLibro \n" + 
@@ -73,7 +73,29 @@ public class RelacionPerteneceACursoDaoImpl implements RelacionPerteneceACursoDa
 				this.utilConexion.limpiarRecursos(transaccion);
 			}
 		} else {
-			throw new Exception("La relación está vacía");
+			throw new Exception("El curso, el libro o la relación son nulas o vacías");
+		}
+	}
+
+	@Override
+	public void eliminarRelacion(Libro libro, Curso curso) throws Exception {
+		if (libro != null && curso != null) {
+			Transaction transaccion = this.utilConexion.getSession().beginTransaction();
+			String query = "match (l:Libro) where id(l) = $idLibro \n" + 
+					"match (c:Curso) where id(c) = $idCurso \n" + 
+					"match ((l)-[r:perteneceACurso]->(c)) \n" + 
+					"delete r";
+			try {
+				transaccion.run(query, Values.parameters("idLibro", libro.getId(), "idCurso", curso.getId()));
+				transaccion.success();
+			} catch (Exception e) {
+				transaccion.failure();
+				throw e;
+			} finally {
+				this.utilConexion.limpiarRecursos(transaccion);
+			}
+		} else {
+			throw new Exception("El libro o el curso son nulos");
 		}
 	}
 }
