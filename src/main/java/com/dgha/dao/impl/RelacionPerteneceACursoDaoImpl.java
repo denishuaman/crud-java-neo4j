@@ -48,12 +48,12 @@ public class RelacionPerteneceACursoDaoImpl implements RelacionPerteneceACursoDa
 						Record record = resultRelacionarLibroACurso.next();
 						relacionPerteneceACurso.setId(record.get("id").asInt());
 						relacionPerteneceACurso.setFechaDeCreacion(
-								Funciones.convertToDateViaInstant(record.get("fechaCreacion").asLocalDateTime()));
+								Funciones.convertirLocalDateTimeADate(record.get("fechaCreacion").asLocalDateTime()));
 						relacionPerteneceACurso.setUsuarioModificacion(!record.get("usuarioModificacion").equals(NullValue.NULL)
 										? record.get("usuarioModificacion").asString()
 										: null);
 						relacionPerteneceACurso.setFechaDeModificacion(!record.get("fechaModificacion").equals(NullValue.NULL) 
-										? Funciones.convertToDateViaInstant(record.get("fechaModificacion").asLocalDateTime())
+										? Funciones.convertirLocalDateTimeADate(record.get("fechaModificacion").asLocalDateTime())
 										: null);
 					}
 				} else {

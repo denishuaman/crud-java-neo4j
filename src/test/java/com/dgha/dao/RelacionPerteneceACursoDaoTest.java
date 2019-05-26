@@ -50,7 +50,7 @@ public class RelacionPerteneceACursoDaoTest {
 		}
 	}
 
-//	@Ignore
+	@Ignore
 	@Test
 	public void eliminarRelacion() {
 		Libro libro = new Libro();
