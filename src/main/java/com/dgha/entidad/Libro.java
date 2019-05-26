@@ -76,6 +76,7 @@ public class Libro {
 			int califAcumTeoria, float califTeoria, int ultCalifPractica, int califAcumPractica, float califPractica,
 			int ultCalifComentario, int califAcumComentario, float califComentario, float calificacionPromedio,
 			int numPedidos, String codEditorial, String estadoLibro) {
+		this.id = -1;
 		this.clasificacion = clasificacion;
 		this.titulo = titulo;
 		this.anio = anio;

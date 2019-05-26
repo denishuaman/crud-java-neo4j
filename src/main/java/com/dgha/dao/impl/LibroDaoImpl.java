@@ -10,20 +10,12 @@ import org.neo4j.driver.v1.Values;
 
 import com.dgha.dao.LibroDao;
 import com.dgha.entidad.Libro;
-import com.dgha.util.UtilConexion;
 
 public class LibroDaoImpl implements LibroDao {
 
-	private UtilConexion utilConexion;
-
-	public LibroDaoImpl() {
-		this.utilConexion = UtilConexion.getInstancia();
-	}
-
 	@Override
-	public List<Libro> listarLibros() {
+	public List<Libro> listarLibros(Transaction transaccion) throws Exception {
 		List<Libro> libros = new ArrayList<>();
-		Transaction transaccion = this.utilConexion.getSession().beginTransaction();
 		String query = "match (l: Libro) \n" + 
 				"return ID(l) as id, \n" + 
 				"l.clasificacion as clasificacion, \n" + 
@@ -85,11 +77,8 @@ public class LibroDaoImpl implements LibroDao {
 				libros.add(libro);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw e;
-		} finally {
-			this.utilConexion.limpiarRecursos(transaccion);
-		}
+		} 
 		return libros;
 	}
 
@@ -100,8 +89,7 @@ public class LibroDaoImpl implements LibroDao {
 	 * @param libro
 	 */
 	@Override
-	public void registrarLibro(Libro libro) {
-		Transaction transaccion = this.utilConexion.getSession().beginTransaction();
+	public void registrarLibro(Libro libro, Transaction transaccion) throws Exception {
 		String queryInsert = "create (\n" + 
 				"l:Libro {\n" + 
 				"clasificacion: $clasificacion, \n" + 
@@ -149,20 +137,14 @@ public class LibroDaoImpl implements LibroDao {
 			if (statementResult.hasNext()) {
 				Record record = statementResult.next();
 				libro.setId(record.get("id").asInt());
-				transaccion.success();
 			}
 		} catch (Exception e) {
-			transaccion.failure();
-			e.printStackTrace();
 			throw e;
-		} finally {
-			this.utilConexion.limpiarRecursos(transaccion);
 		}
 	}
 
 	@Override
-	public void modificarLibro(Libro libro) {
-		Transaction transaccion = this.utilConexion.getSession().beginTransaction();
+	public void modificarLibro(Libro libro, Transaction transaccion) throws Exception {
 		String query = "match (l: Libro) where id(l) = $id " +
 				"set l.clasificacion = $clasificacion, \n" + 
 				"l.titulo = $titulo, \n" + 
@@ -208,29 +190,20 @@ public class LibroDaoImpl implements LibroDao {
 							libro.getCalificacionPromedio(), "numPedidos", libro.getNumPedidos(), "estadoLibro",
 							libro.getEstadoLibro()));
 			if (statementResult.hasNext()) {
-				transaccion.success();
+				System.out.println("LibroDaoImpl.modificarLibro(): Se modificó el libro");
 			}
 		} catch (Exception e) {
-			transaccion.failure();
-			e.printStackTrace();
 			throw e;
-		} finally {
-			this.utilConexion.limpiarRecursos(transaccion);
 		}
 	}
 
 	@Override
-	public void eliminarLibro(Libro libro) {
-		Transaction transaccion = this.utilConexion.getSession().beginTransaction();
+	public void eliminarLibro(Libro libro, Transaction transaccion) throws Exception {
 		String query = "match (l:Libro) where id(l)=$id detach delete l";
 		try {
 			transaccion.run(query, Values.parameters("id", libro.getId()));
-			transaccion.success();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw e;
-		} finally {
-			this.utilConexion.limpiarRecursos(transaccion);
 		}
 	}
 

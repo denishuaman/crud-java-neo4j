@@ -25,7 +25,6 @@ public class UtilConexion {
 		this.usuario = resourceBundle.getString("usuario");
 		this.constrasena = resourceBundle.getString("contrasena");
 		cargarDriver();
-		crearSesion();
 	}
 
 	public static UtilConexion getInstancia() {

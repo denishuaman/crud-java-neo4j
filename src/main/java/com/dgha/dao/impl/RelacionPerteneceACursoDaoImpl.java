@@ -1,5 +1,6 @@
 package com.dgha.dao.impl;
 
+import org.apache.log4j.Logger;
 import org.neo4j.driver.internal.value.NullValue;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
@@ -11,22 +12,15 @@ import com.dgha.entidad.Curso;
 import com.dgha.entidad.Libro;
 import com.dgha.entidad.RelacionPerteneceACurso;
 import com.dgha.util.Funciones;
-import com.dgha.util.UtilConexion;
 
 public class RelacionPerteneceACursoDaoImpl implements RelacionPerteneceACursoDao {
-
-	private UtilConexion utilConexion;
-
-	public RelacionPerteneceACursoDaoImpl() {
-		this.utilConexion = UtilConexion.getInstancia();
-	}
+	
+	private final Logger log = Logger.getLogger(this.getClass());
 
 	@Override
-	public void relacionar(Libro libro, Curso curso, RelacionPerteneceACurso relacionPerteneceACurso) throws Exception {
+	public void relacionar(Libro libro, Curso curso, RelacionPerteneceACurso relacionPerteneceACurso, Transaction transaccion) throws Exception {
 		
 		if (libro != null && curso != null && relacionPerteneceACurso != null) {
-			Transaction transaccion = this.utilConexion.getSession().beginTransaction();
-			
 			String queryBuscarRelacion = "match (l:Libro) where id(l) = $ idLibro \n" + 
 					"match (c:Curso) where id(c) = $idCurso \n" + 
 					"match ((l)-[r:perteneceACurso]->(c)) \n" + 
@@ -42,7 +36,7 @@ public class RelacionPerteneceACursoDaoImpl implements RelacionPerteneceACursoDa
 					+ "r.usuarioModificacionRelPerteneceACurso as usuarioModificacion, "
 					+ "r.fechaModificacionRelPerteneceACurso as fechaModificacion";
 			
-			System.out.println("RelacionPerteneceACursoDaoImpl.relacionar(): query=" + queryRelacionarLibroACurso);
+			log.info("queryRelacionarLibroACurso=" + queryRelacionarLibroACurso);
 			try {
 				StatementResult resultBuscarRelacion = transaccion.run(queryBuscarRelacion,
 						Values.parameters("idLibro", libro.getId(), "idCurso", curso.getId()));
@@ -61,39 +55,30 @@ public class RelacionPerteneceACursoDaoImpl implements RelacionPerteneceACursoDa
 						relacionPerteneceACurso.setFechaDeModificacion(!record.get("fechaModificacion").equals(NullValue.NULL) 
 										? Funciones.convertToDateViaInstant(record.get("fechaModificacion").asLocalDateTime())
 										: null);
-						transaccion.success();
 					}
 				} else {
 					throw new Exception("La relación entre el libro y el curso ya existe");
 				}
 			} catch (Exception e) {
-				transaccion.failure();
 				throw e;
-			} finally {
-				this.utilConexion.limpiarRecursos(transaccion);
-			}
+			} 
 		} else {
 			throw new Exception("El curso, el libro o la relación son nulas o vacías");
 		}
 	}
 
 	@Override
-	public void eliminarRelacion(Libro libro, Curso curso) throws Exception {
+	public void eliminarRelacion(Libro libro, Curso curso, Transaction transaccion) throws Exception {
 		if (libro != null && curso != null) {
-			Transaction transaccion = this.utilConexion.getSession().beginTransaction();
 			String query = "match (l:Libro) where id(l) = $idLibro \n" + 
 					"match (c:Curso) where id(c) = $idCurso \n" + 
 					"match ((l)-[r:perteneceACurso]->(c)) \n" + 
 					"delete r";
 			try {
 				transaccion.run(query, Values.parameters("idLibro", libro.getId(), "idCurso", curso.getId()));
-				transaccion.success();
 			} catch (Exception e) {
-				transaccion.failure();
 				throw e;
-			} finally {
-				this.utilConexion.limpiarRecursos(transaccion);
-			}
+			} 
 		} else {
 			throw new Exception("El libro o el curso son nulos");
 		}

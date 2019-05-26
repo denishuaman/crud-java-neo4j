@@ -14,6 +14,7 @@ public class Curso {
 	}
 
 	public Curso(String codigoCurso, String nombreCurso, String estadoCurso) {
+		this.id = -1;
 		this.codigoCurso = codigoCurso;
 		this.nombreCurso = nombreCurso;
 		this.estadoCurso = estadoCurso;
